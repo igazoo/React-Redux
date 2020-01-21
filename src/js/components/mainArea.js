@@ -7,30 +7,14 @@ export default class MainArea extends React.Component{
   constructor(props){
     super(props);
 
-    this.state ={
-      todos: [
-          {id: 'item-1',
-           label: 'Todo1',
-            complete: false},
-          {id: 'item-2',
-            label: 'Todo2',
-            complete: false},
-
-      ],
-      todoInputValue: " "
-    }
-  }
-
-  onCompleteTodo(id){
-    console.log("onCompleteTodo",id);
-    let _state = Object.assign({},this.state);
-    for(var i =0 ; i < _state.todos.length; i++){
-      if (_state.todos[i].id == id){
-        _state.todos[i].completed = true;
-        break ;
+      this.state={
+        todoInputValue: " "
       }
     }
-    this.setState(_state);
+
+
+  onCompleteTodo(id){
+    this.props.onCompleteTodo(id);
   }
 
   onChangeTodoInput(event){
@@ -38,35 +22,22 @@ export default class MainArea extends React.Component{
   }
 
   onDeleteTodo(id){
-    let _state = Object.assign({},this.state);
-    for (var i = 0; i < _state.todos.length; i ++){
-      if (_state.todos[i].id==id) {
-          _state.todos.splice(i,1);
-        break ;
-      }
-    }
-    this.setState(_state);
+    this.props.onDeleteTodo(id);
   }
 
   onClickAddButton(event){
-
-    let addItem = {label: this.state.todoInputValue};
-    let todos = this.state.todos.slice();
-    todos.push(addItem);
-    this.setState({
-      todos: todos,
-      todoInputValue: " "
-    });
+    this.setState({todoInputValue: ""});
+    this.props.onAddTodo(this.state.todoInputValue);
 
   }
 
   renderTodoItems(){
     let todoItemDom =[];
-    for (var i = 0 ; i < this.state.todos.length; i++){
-      if (!this.state.todos[i].completed){
+    for (var i = 0 ; i < this.props.todoList.length; i++){
+      if (!this.props.todoList[i].completed){
         let todoItem = <ListItem
                           key={'item-'+i}
-                          data ={this.state.todos[i]}
+                          data ={this.props.todoList[i]}
                           completeTodo ={this.onCompleteTodo.bind(this)}
                           deleteTodo={this.onDeleteTodo.bind(this)}
                           />;
